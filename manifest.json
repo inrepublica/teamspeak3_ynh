@@ -19,16 +19,14 @@
     "services": ["nginx", "php5-fpm"],
     "arguments": {
         "install" : [
-            {
-                "name": "platform",
-                "ask": {
-                    "en": "64 bit or 32 bit? (amd64 vs x86)",
-					"fr": "64 bit ou 32 bit? (amd64 ou x86)"
-                },
-                "choices": ["amd64", "x86"],
-				"example": "amd64",
-                "default": "amd64"
-            }
+            "name": "platform",
+            "ask": {
+                "en": "64 bit or 32 bit? (amd64 vs x86)",
+				"fr": "64 bit ou 32 bit? (amd64 ou x86)"
+            },
+            "choices": ["amd64", "x86"],
+			"example": "amd64",
+            "default": "amd64"
         ]
     }
 }
