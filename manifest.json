@@ -1,0 +1,37 @@
+{
+    "name": "TeamSpeak 3 Server",
+    "id": "teamspeak3",
+    "packaging_format": 1,
+    "description": {
+        "en": "Cross-platform voice communication server.",
+        "fr": "Serveur de communication multi-plateforme"
+    },
+    "url": "http://teamspeak.com/",
+    "license": "non-free",
+    "maintainer": {
+        "name": "inrepublica",
+        "email": "duvalmickael@gmail.com"
+    },
+    "requirements": {
+        "yunohost": ">= 2.4.0.5"
+    },
+    "multi_instance": false,
+    "services": [
+        "nginx",
+        "php5-fpm"
+    ],
+    "arguments": {
+        "install" : [
+            {
+                "name": "platform",
+                "ask": {
+                    "en": "64 bit or 32 bit? (amd64 vs x86)",
+					"fr": "64 bit ou 32 bit? (amd64 ou x86)"
+                },
+                "choices": ["amd64", "x86"],
+				"example": "amd64",
+                "default": "amd64"
+            }
+        ]
+    },
+}

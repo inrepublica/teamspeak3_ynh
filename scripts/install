@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# Define app
+app=teamspeak3
+version=3.0.12.4
+md5_source=5606ed94e50fbacc3f1b8d5bba470afd
+final_path=/home/teamspeak3
+
+# Retrieve arguments
+platform=$YNH_APP_ARG_PLATFORM
+
+# Source YunoHost helpers
+. /usr/share/yunohost/helpers
+
+# Save app settings
+ynh_app_setting_set "$app" domain "$platform"
+
+# Check domain/path availability
+# sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+#    || ynh_die "Path not available: ${domain}${path}"
+
+# Create teamspeak user with homefolder
+sudo useradd teamspeak -m
+
+# Download source, check md5, untar, copy it
+sudo wget http://dl.4players.de/ts/releases/$version/teamspeak3-server_linux_$platform-$version.tar.bz2 -O /tmp/teamspeak3server.tar.bz2
+
+# Check md5
+md5_check=($(md5sum /tmp/teamspeak3server.tar.bz2))
+if [ $md5_source != $md5_check ]
+then
+        ynh_die "the download is corrupted (md5 different)"
+fi
+
+# Untar, copy it
+sudo tar -xvf /tmp/teamspeak3server.tar.bz2 -C /tmp/
+sudo cp -a /tmp/teamspeak3-serveur_linux_$platform/. $final_path
+
+# Create configuration file
+sudo cp ../config/teamspeak3_server.ini $final_path/teamspeak3_server.ini
+
+# Attribute /home/teamspeak3 to teamspeak user
+sudo chown -R teamspeak:teamspeak $final_path
+
+# Add firewall rules
+sudo yunohost firewall allow UDP 9987
+sudo yunohost firewall allow TCP 10011
+sudo yunohost firewall allow TCP 30033
+
+# Enable and start service
+sudo cp ../config/teamspeak3_server.service /lib/systemd/system/$app.service
+sudo systemctl daemon-reload
+sudo systemctl enable $app.service
+sudo systemctl start $app.service
+sudo yunohost service add teamspeak -l $final_path/logs/ts3server_0.log
+
+# Set permissions to teamspeak directory web UI
+# sudo chown -R www-data: $final_path
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+# sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
+# sed -i "s@YNH_WWW_ALIAS@$final_path/@g" ../conf/nginx.conf
+# sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+# If app is public, add url to SSOWat conf as skipped_uris
+# if [ "$is_public" = "Yes" ];
+# then
+#	unprotected_uris allows SSO credentials to be passed anyway.
+#	ynh_app_setting_set "$app" unprotected_uris "/"
+# fi
+
+# Restart services
+# sudo service nginx reload
