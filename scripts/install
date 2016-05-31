@@ -54,7 +54,7 @@ fi
 
 # Untar, copy it
 sudo tar -xvf /tmp/teamspeak3server.tar.bz2 -C /tmp/
-sudo cp -a /tmp/teamspeak3-serveur_linux_$arch/. $final_path
+sudo cp -a /tmp/teamspeak3-server_linux_$arch/. $final_path
 
 # Create configuration file
 sudo cp ../config/teamspeak3_server.ini $final_path/teamspeak3_server.ini
