@@ -6,17 +6,22 @@ set -eu
 # Define app
 app=teamspeak3
 version=3.0.12.4
-md5_source=5606ed94e50fbacc3f1b8d5bba470afd
 final_path=/home/teamspeak3
 
 # Retrieve arguments
-platform=$YNH_APP_ARG_PLATFORM
+
+
+
+
 
 # Source YunoHost helpers
 . /usr/share/yunohost/helpers
 
 # Save app settings
-ynh_app_setting_set "$app" domain "$platform"
+
+
+
+
 
 # Check domain/path availability
 # sudo yunohost app checkurl "${domain}${path}" -a "$app" \
@@ -25,8 +30,20 @@ ynh_app_setting_set "$app" domain "$platform"
 # Create teamspeak user with homefolder
 sudo useradd teamspeak -m
 
-# Download source, check md5, untar, copy it
-sudo wget http://dl.4players.de/ts/releases/$version/teamspeak3-server_linux_$platform-$version.tar.bz2 -O /tmp/teamspeak3server.tar.bz2
+# Find architecture and download source
+arch=$(uname -m)
+if [ $arch = "i386" ] || [ $arch = "i486" ] || [ $arch = "i586" ] || [ $arch = "i686" ];
+then
+	arch="x86"
+	md5_source=4d46994611092199d6ff9cf657d30a12
+elif [ $ARCH = "x86_64" ];
+then
+	arch="amd64"
+	md5_source=5606ed94e50fbacc3f1b8d5bba470afd
+else
+	echo "ynh_die "${arch} is not a valid architecture.""
+fi
+sudo wget http://dl.4players.de/ts/releases/$version/teamspeak3-server_linux_$arch-$version.tar.bz2 -O /tmp/teamspeak3server.tar.bz2
 
 # Check md5
 md5_check=($(md5sum /tmp/teamspeak3server.tar.bz2))
