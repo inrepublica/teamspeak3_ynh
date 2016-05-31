@@ -36,7 +36,7 @@ if [ $arch = "i386" ] || [ $arch = "i486" ] || [ $arch = "i586" ] || [ $arch = "
 then
 	arch="x86"
 	md5_source=4d46994611092199d6ff9cf657d30a12
-elif [ $ARCH = "x86_64" ];
+elif [ $arch = "x86_64" ];
 then
 	arch="amd64"
 	md5_source=5606ed94e50fbacc3f1b8d5bba470afd
