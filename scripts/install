@@ -57,7 +57,7 @@ sudo tar -xvf /tmp/teamspeak3server.tar.bz2 -C /tmp/
 sudo cp -a /tmp/teamspeak3-server_linux_$arch/. $final_path
 
 # Create configuration file
-sudo cp ../config/teamspeak3_server.ini $final_path/teamspeak3_server.ini
+sudo cp ../conf/teamspeak3_server.ini $final_path/teamspeak3_server.ini
 
 # Attribute /home/teamspeak3 to teamspeak user
 sudo chown -R teamspeak:teamspeak $final_path
