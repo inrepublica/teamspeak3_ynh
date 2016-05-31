@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Define app
+app=teamspeak3
+final_path=/home/teamspeak3
+
+# Source YunoHost helpers
+. /usr/share/yunohost/helpers
+
+# Retrieve app settings
+
+
+
+
+
+
+# Disable and remove service
+sudo systemctl stop $app.service
+sudo systemctl disable $app.service
+sudo rm /lib/systemd/system/$app.service
+
+# Delete teamspeak user and his home folder
+sudo userdel -r teamspeak 
+
+# Delete firewall rules
+sudo yunohost firewall disallow UDP 9987
+sudo yunohost firewall disallow TCP 10011
+sudo yunohost firewall disallow TCP 30033
+
+# Remove yunohost teamspeak service
+sudo yunohost service remove teamspeak
+
+# Remove configuration files
+# sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+
+# Restart services
+# sudo service nginx reload
