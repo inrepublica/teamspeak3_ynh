@@ -4,7 +4,7 @@
     "packaging_format": 1,
     "description": {
         "en": "Cross-platform voice communication server.",
-        "fr": "Serveur de communication multi-plateforme"
+        "fr": "Serveur de communication multi-plateforme."
     },
     "url": "http://teamspeak.com/",
     "license": "non-free",
@@ -13,20 +13,53 @@
         "email": "duvalmickael@gmail.com"
     },
     "requirements": {
-        "yunohost": ">= 2.4.0.5"
+        "yunohost": ">= 2.4.0.6"
     },
     "multi_instance": false,
-    "services": ["nginx", "php5-fpm"],
+    "services": [
+        "nginx",
+        "php5-fpm"
+    ],
     "arguments": {
         "install" : [
-            "name": "platform",
-            "ask": {
-                "en": "64 bit or 32 bit? (amd64 vs x86)",
-				"fr": "64 bit ou 32 bit? (amd64 ou x86)"
+            {
+                "name": "domain",
+                "type": "domain",
+                "ask": {
+                    "en": "Choose a domain for Teamspeak3 web interface",
+                    "fr": "Choisissez un domaine pour l'interface web de Teamspeak3"
+                },
+                "example": "domain.org"
             },
-            "choices": ["amd64", "x86"],
-			"example": "amd64",
-            "default": "amd64"
+            {
+                "name": "path",
+                "type": "path",
+                "ask": {
+                    "en": "Choose a path for PhpSysInfo",
+                    "fr": "Choisissez un chemin pour PhpSysInfo"
+                },
+                "example": "/teamspeak3web",
+                "default": "/teamspeak3web"
+            },
+            {
+                "name": "is_public",
+                "ask": {
+                    "en": "Make web interface public ?",
+                    "fr": "Rendre l'interface web publique ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "No"
+            },
+			{
+                "name": "platform",
+                "ask": {
+					"en": "64 bit or 32 bit? (amd64 vs x86)",
+					"fr": "64 bit ou 32 bit? (amd64 ou x86)"
+				},
+                "choices": ["amd64", "x86"],
+				"example": "amd64",
+                "default": "amd64"
+            }
         ]
     }
 }
