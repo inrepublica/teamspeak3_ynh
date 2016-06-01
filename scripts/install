@@ -4,9 +4,9 @@
 set -eu
 
 # Define app
-app=teamspeak3
+app=teamspeak
 version=3.0.12.4
-final_path=/home/teamspeak3
+final_path=/home/teamspeak
 
 # Retrieve arguments
 
@@ -43,21 +43,21 @@ then
 else
 	echo "ynh_die "${arch} is not a valid architecture.""
 fi
-sudo wget http://dl.4players.de/ts/releases/$version/teamspeak3-server_linux_$arch-$version.tar.bz2 -O /tmp/teamspeak3server.tar.bz2
+sudo wget http://dl.4players.de/ts/releases/$version/teamspeak3-server_linux_$arch-$version.tar.bz2 -O /tmp/teamspeakserver.tar.bz2
 
 # Check md5
-md5_check=($(md5sum /tmp/teamspeak3server.tar.bz2))
+md5_check=($(md5sum /tmp/teamspeakserver.tar.bz2))
 if [ $md5_source != $md5_check ]
 then
         ynh_die "the download is corrupted (md5 different)"
 fi
 
 # Untar, copy it
-sudo tar -xvf /tmp/teamspeak3server.tar.bz2 -C /tmp/
+sudo tar -xvf /tmp/teamspeakserver.tar.bz2 -C /tmp/
 sudo cp -a /tmp/teamspeak3-server_linux_$arch/. $final_path
 
 # Create configuration file
-sudo cp ../conf/teamspeak3_server.ini $final_path/teamspeak3_server.ini
+sudo cp ../conf/teamspeak.ini $final_path/teamspeak.ini
 
 # Attribute /home/teamspeak3 to teamspeak user
 sudo chown -R teamspeak:teamspeak $final_path
@@ -68,11 +68,11 @@ sudo yunohost firewall allow TCP 10011
 sudo yunohost firewall allow TCP 30033
 
 # Enable and start service
-sudo cp ../conf/teamspeak3_server.service /lib/systemd/system/$app.service
+sudo cp ../conf/$app.service /lib/systemd/system/$app.service
 sudo systemctl daemon-reload
 sudo systemctl enable $app.service
 sudo systemctl start $app.service
-sudo yunohost service add teamspeak -l $final_path/logs/ts3server_0.log
+sudo yunohost service add teamspeak -l $final_path/logs/teamspeak_first.log
 
 # Set permissions to teamspeak directory web UI
 # sudo chown -R www-data: $final_path

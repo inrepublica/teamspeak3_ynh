@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define app
-app=teamspeak3
-final_path=/home/teamspeak3
+app=teamspeak
+final_path=/home/teamspeak
 
 # Source YunoHost helpers
 . /usr/share/yunohost/helpers
