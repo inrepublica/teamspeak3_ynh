@@ -43,7 +43,7 @@ then
 else
 	echo "ynh_die "${arch} is not a valid architecture.""
 fi
-sudo wget http://dl.4players.de/ts/releases/$version/teamspeak3-server_linux_$arch-$version.tar.bz2 -O /tmp/teamspeakserver.tar.bz2
+sudo wget -q http://dl.4players.de/ts/releases/$version/teamspeak3-server_linux_$arch-$version.tar.bz2 -O /tmp/teamspeakserver.tar.bz2
 
 # Check md5
 md5_check=($(md5sum /tmp/teamspeakserver.tar.bz2))
