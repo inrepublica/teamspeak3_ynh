@@ -5,27 +5,26 @@ set -eu
 
 # Define app
 app=teamspeak
+app_wi=teamspeak_wi
 version=3.0.12.4
-final_path=/home/teamspeak
+final_path=/home/$app
 
 # Retrieve arguments
-
-
-
-
+domain=$YNH_APP_ARG_DOMAIN
+path=$YNH_APP_ARG_PATH
+is_public=$YNH_APP_ARG_IS_PUBLIC
 
 # Source YunoHost helpers
 . /usr/share/yunohost/helpers
 
 # Save app settings
-
-
-
-
+ynh_app_setting_set "$app" domain "$domain"
+ynh_app_setting_set "$app" path "$path"
+ynh_app_setting_set "$app" is_public "$is_public"
 
 # Check domain/path availability
-# sudo yunohost app checkurl "${domain}${path}" -a "$app" \
-#    || ynh_die "Path not available: ${domain}${path}"
+sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+	|| ynh_die "Path not available: ${domain}${path}"
 
 # Create teamspeak user with homefolder
 sudo useradd teamspeak -m
@@ -74,20 +73,25 @@ sudo systemctl enable $app.service
 sudo systemctl start $app.service
 sudo yunohost service add teamspeak -l $final_path/logs/teamspeak_first.log
 
-# Set permissions to teamspeak directory web UI
-# sudo chown -R www-data: $final_path
+# Copy teamspeak server web interface
+webinterface_final_path=/var/www/$path
+sudo mkdir -p $webinterface_final_path
+sudo cp -a ../sources/teamspeak_wi. $webinterface_final_path
+
+# Set permissions to teamspeak directory web interface
+sudo chown -R www-data: $webinterface_final_path
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
-# sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
-# sed -i "s@YNH_WWW_ALIAS@$final_path/@g" ../conf/nginx.conf
-# sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+sed -i "s@YNH_WWW_PATH@$path@g" ../conf/nginx.conf
+sed -i "s@YNH_WWW_ALIAS@$webinterface_final_path/@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app_wi.conf
 
 # If app is public, add url to SSOWat conf as skipped_uris
-# if [ "$is_public" = "Yes" ];
-# then
-#	unprotected_uris allows SSO credentials to be passed anyway.
-#	ynh_app_setting_set "$app" unprotected_uris "/"
-# fi
+if [ "$is_public" = "Yes" ];
+then
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set "$app_wi" unprotected_uris "/"
+fi
 
 # Restart services
-# sudo service nginx reload
+sudo service nginx reload
