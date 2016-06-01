@@ -77,7 +77,7 @@ sudo yunohost service add teamspeak -l $teamspeak_path/logs/teamspeak_first.log
 
 # Copy teamspeak server web interface
 sudo mkdir -p $teamspeakwi_path
-sudo cp -a ../sources/teamspeak_wi. $teamspeakwi_path
+sudo cp -a ../sources/teamspeakwi/. $teamspeakwi_path
 
 # Set permissions to teamspeak directory web interface
 sudo chown -R www-data: $teamspeakwi_path
