@@ -38,8 +38,8 @@
                     "en": "Choose a path for Teamspeak web interface",
                     "fr": "Choisissez un chemin pour l'interface web de Teamspeak3"
                 },
-                "example": "/teamspeak_wi",
-                "default": "/teamspeak_wi"
+                "example": "/teamspeak",
+                "default": "/teamspeak"
             },
             {
                 "name": "is_public",
